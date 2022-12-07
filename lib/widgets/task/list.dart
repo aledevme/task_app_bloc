@@ -12,7 +12,8 @@ class ListOfTask extends StatelessWidget {
       children: [
         Expanded(
             child: ListView.builder(
-          itemCount: taskList.length,
+          itemCount:
+              taskList.where((element) => element.isDeleted! == false).length,
           itemBuilder: (BuildContext context, int index) {
             Task taskItem = taskList[index];
             return ListTile(

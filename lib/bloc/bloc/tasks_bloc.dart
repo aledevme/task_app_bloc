@@ -38,8 +38,19 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     final int index = state.allTask.indexOf(task);
 
     List<Task> allTask = List.from(state.allTask)..remove(task);
+
+    task.isDeleted == false
+        ? allTask.insert(index, task.copyWith(isDeleted: true))
+        : allTask.insert(index, task.copyWith(isDeleted: false));
+
     emit(TasksState(allTask: allTask));
   }
+  // void _onDeleteTask(DeleteTask event, Emitter<TasksState> emit) {
+  //   final state = this.state;
+  //   final task = event.task;
+  //   List<Task> allTask = List.from(state.allTask)..remove(task);
+  //   emit(TasksState(allTask: allTask));
+  // }
 
   @override
   TasksState? fromJson(Map<String, dynamic> json) {
