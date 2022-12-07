@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:task_app/bloc/bloc_exports.dart';
 import 'package:task_app/views/task/list.dart';
 
-void main() {
-  BlocOverrides.runZoned(() => runApp(const MyApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  HydratedBloc.storage = await HydratedStorage.build(
+      storageDirectory: await getApplicationDocumentsDirectory());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -12,10 +17,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: BlocProvider(
+    return BlocProvider(
       create: (context) => TasksBloc(),
-      child: TaskListScreen(),
-    ));
+      child: MaterialApp(
+        home: TaskListScreen(),
+      ),
+    );
   }
 }

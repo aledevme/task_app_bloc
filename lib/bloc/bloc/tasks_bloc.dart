@@ -1,11 +1,11 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:task_app/bloc/bloc_exports.dart';
 import 'package:task_app/models/Task.dart';
 
 part 'tasks_event.dart';
 part 'tasks_state.dart';
 
-class TasksBloc extends Bloc<TasksEvent, TasksState> {
+class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
   TasksBloc() : super(const TasksState()) {
     on<AddTask>(_onAddTask);
     on<UpdateTask>(_onUpdateTask);
@@ -28,5 +28,16 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     final state = this.state;
 
     emit(TasksState(allTask: List.from(state.allTask)..add(event.task)));
+  }
+
+  @override
+  TasksState? fromJson(Map<String, dynamic> json) {
+    return TasksState.fromMap(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(TasksState state) {
+    // TODO: implement toJson
+    return state.toMap();
   }
 }
