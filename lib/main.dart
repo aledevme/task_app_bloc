@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:task_app/bloc/bloc_exports.dart';
-import 'package:task_app/views/task/list.dart';
+import 'package:task_app/router/router.dart';
+import 'package:task_app/views/task/taskList.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => TasksBloc(),
       child: MaterialApp(
-        home: TaskListScreen(),
+        initialRoute: '/',
+        routes: getRoutes(),
       ),
     );
   }

@@ -10,6 +10,7 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     on<AddTask>(_onAddTask);
     on<UpdateTask>(_onUpdateTask);
     on<DeleteTask>(_onDeleteTask);
+    on<RestoreTask>(_onRestoreTask);
   }
 
   void _onAddTask(AddTask event, Emitter<TasksState> emit) {
@@ -39,18 +40,26 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
 
     List<Task> allTask = List.from(state.allTask)..remove(task);
 
-    task.isDeleted == false
-        ? allTask.insert(index, task.copyWith(isDeleted: true))
-        : allTask.insert(index, task.copyWith(isDeleted: false));
+    if (!task.isDeleted!) {
+      allTask.insert(index, task.copyWith(isDeleted: true));
+    }
 
     emit(TasksState(allTask: allTask));
   }
-  // void _onDeleteTask(DeleteTask event, Emitter<TasksState> emit) {
-  //   final state = this.state;
-  //   final task = event.task;
-  //   List<Task> allTask = List.from(state.allTask)..remove(task);
-  //   emit(TasksState(allTask: allTask));
-  // }
+
+  void _onRestoreTask(RestoreTask event, Emitter<TasksState> emit) {
+    final state = this.state;
+    final task = event.task;
+    final int index = state.allTask.indexOf(task);
+
+    List<Task> allTask = List.from(state.allTask)..remove(task);
+
+    if (task.isDeleted!) {
+      allTask.insert(index, task.copyWith(isDeleted: false));
+    }
+
+    emit(TasksState(allTask: allTask));
+  }
 
   @override
   TasksState? fromJson(Map<String, dynamic> json) {

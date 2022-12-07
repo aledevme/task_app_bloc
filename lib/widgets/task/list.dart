@@ -12,23 +12,34 @@ class ListOfTask extends StatelessWidget {
       children: [
         Expanded(
             child: ListView.builder(
-          itemCount:
-              taskList.where((element) => element.isDeleted! == false).length,
+          itemCount: taskList.length,
           itemBuilder: (BuildContext context, int index) {
             Task taskItem = taskList[index];
             return ListTile(
               title: Text(taskItem.title),
-              leading: Checkbox(
-                value: taskItem.isDone,
-                onChanged: (value) {
-                  context.read<TasksBloc>().add(UpdateTask(task: taskItem));
-                },
-              ),
+              leading: taskItem.isDeleted! == true
+                  ? null
+                  : Checkbox(
+                      value: taskItem.isDone,
+                      onChanged: (value) {
+                        context
+                            .read<TasksBloc>()
+                            .add(UpdateTask(task: taskItem));
+                      },
+                    ),
               trailing: GestureDetector(
                   onTap: () {
-                    context.read<TasksBloc>().add(DeleteTask(task: taskItem));
+                    if (taskItem.isDeleted!) {
+                      context
+                          .read<TasksBloc>()
+                          .add(RestoreTask(task: taskItem));
+                    } else {
+                      context.read<TasksBloc>().add(DeleteTask(task: taskItem));
+                    }
                   },
-                  child: Icon(Icons.delete)),
+                  child: taskItem.isDeleted!
+                      ? Icon(Icons.restore)
+                      : Icon(Icons.delete)),
             );
           },
         ))
