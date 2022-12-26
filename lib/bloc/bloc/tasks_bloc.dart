@@ -8,9 +8,9 @@ part 'tasks_state.dart';
 class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
   TasksBloc() : super(const TasksState()) {
     on<AddTask>(_onAddTask);
-    on<UpdateTask>(_onUpdateTask);
+    on<OnDoneTask>(_onDoneTask);
+    on<UpdateSingleTask>(_onUpdateSingleTask);
     on<DeleteTask>(_onDeleteTask);
-    on<RestoreTask>(_onRestoreTask);
   }
 
   void _onAddTask(AddTask event, Emitter<TasksState> emit) {
@@ -19,17 +19,29 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     emit(TasksState(allTask: List.from(state.allTask)..add(event.task)));
   }
 
-  void _onUpdateTask(UpdateTask event, Emitter<TasksState> emit) {
+  void _onDoneTask(OnDoneTask event, Emitter<TasksState> emit) {
     final state = this.state;
     final task = event.task;
-    final int index = state.allTask.indexOf(task);
+    final int index =
+        state.allTask.indexWhere((element) => element.id == event.task.id);
 
-    List<Task> allTask = List.from(state.allTask)..remove(task);
+    List<Task> allTask = List.from(state.allTask)..removeAt(index);
 
     task.isDone == false
-        ? allTask.insert(index, task.copyWith(isDone: true))
-        : allTask.insert(index, task.copyWith(isDone: false));
+        ? allTask.insert(index, task.copyWith(title: task.title, isDone: true))
+        : allTask.insert(
+            index, task.copyWith(title: task.title, isDone: false));
 
+    emit(TasksState(allTask: allTask));
+  }
+
+  void _onUpdateSingleTask(UpdateSingleTask event, Emitter<TasksState> emit) {
+    final state = this.state;
+    final task = event.task;
+    final int index =
+        state.allTask.indexWhere((element) => element.id == event.task.id);
+    List<Task> allTask = List.from(state.allTask)..removeAt(index);
+    allTask.insert(index, task);
     emit(TasksState(allTask: allTask));
   }
 
@@ -42,20 +54,6 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
 
     if (!task.isDeleted!) {
       allTask.insert(index, task.copyWith(isDeleted: true));
-    }
-
-    emit(TasksState(allTask: allTask));
-  }
-
-  void _onRestoreTask(RestoreTask event, Emitter<TasksState> emit) {
-    final state = this.state;
-    final task = event.task;
-    final int index = state.allTask.indexOf(task);
-
-    List<Task> allTask = List.from(state.allTask)..remove(task);
-
-    if (task.isDeleted!) {
-      allTask.insert(index, task.copyWith(isDeleted: false));
     }
 
     emit(TasksState(allTask: allTask));

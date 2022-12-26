@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:task_app/bloc/bloc_exports.dart';
 import 'package:task_app/router/router.dart';
-import 'package:task_app/views/task/taskList.dart';
+import 'package:task_app/views/task/pendingTaskList.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

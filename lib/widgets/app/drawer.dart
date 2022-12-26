@@ -62,16 +62,7 @@ class DrawerApp extends StatelessWidget {
                   Navigator.pushNamed(context, '/');
                 },
                 title: Text(
-                  'Inicio',
-                  style: TextStyle(fontSize: 17),
-                ),
-              ),
-              ListTile(
-                onTap: () {
-                  Navigator.pushNamed(context, '/deleted/tasks');
-                },
-                title: Text(
-                  'Notas eliminadas',
+                  'Pending Tasks',
                   style: TextStyle(fontSize: 17),
                 ),
                 trailing: GestureDetector(
@@ -86,7 +77,7 @@ class DrawerApp extends StatelessWidget {
                             right: 0,
                             bottom: 0,
                             child: Icon(
-                              Icons.delete,
+                              Icons.pending,
                               size: 30,
                             )),
                         Positioned(
@@ -99,7 +90,50 @@ class DrawerApp extends StatelessWidget {
                                 height: 20,
                                 color: Color(0xffeaac8b),
                                 child: Text(
-                                  '${state.allTask.where((element) => element.isDeleted!).length}',
+                                  '${state.allTask.where((element) => !element.isDone!).length}',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, '/completed/tasks');
+                },
+                title: Text(
+                  'Completed Tasks',
+                  style: TextStyle(fontSize: 17),
+                ),
+                trailing: GestureDetector(
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: Icon(
+                              Icons.check,
+                              size: 30,
+                            )),
+                        Positioned(
+                            right: 0,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: 20,
+                                height: 20,
+                                color: Color(0xffeaac8b),
+                                child: Text(
+                                  '${state.allTask.where((element) => element.isDone!).length}',
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),

@@ -17,10 +17,18 @@ class AddTask extends TasksEvent {
   List<Object> get props => [task];
 }
 
-class UpdateTask extends TasksEvent {
+class OnDoneTask extends TasksEvent {
   final Task task;
+  const OnDoneTask({required this.task});
 
-  const UpdateTask({required this.task});
+  @override
+  // TODO: implement props
+  List<Object> get props => [task];
+}
+
+class UpdateSingleTask extends TasksEvent {
+  final Task task;
+  const UpdateSingleTask({required this.task});
 
   @override
   // TODO: implement props
@@ -31,16 +39,6 @@ class DeleteTask extends TasksEvent {
   final Task task;
 
   const DeleteTask({required this.task});
-
-  @override
-  // TODO: implement props
-  List<Object> get props => [task];
-}
-
-class RestoreTask extends TasksEvent {
-  final Task task;
-
-  const RestoreTask({required this.task});
 
   @override
   // TODO: implement props

@@ -3,15 +3,28 @@ import 'package:task_app/bloc/bloc_exports.dart';
 import 'package:task_app/models/Task.dart';
 import 'package:uuid/uuid.dart';
 
-class CreateTaskForm extends StatefulWidget {
+class FormTask extends StatefulWidget {
+  Task? itemTask;
+  FormTask({this.itemTask});
   @override
-  State<CreateTaskForm> createState() => _CreateTaskFormState();
+  State<FormTask> createState() => _FormTaskState();
 }
 
-class _CreateTaskFormState extends State<CreateTaskForm> {
+class _FormTaskState extends State<FormTask> {
   TextEditingController controllerNameTask = TextEditingController();
   bool isDone = false;
   var uuid = Uuid();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (widget.itemTask != null) {
+      isDone = widget.itemTask!.isDone!;
+      controllerNameTask.text = widget.itemTask!.title;
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -49,10 +62,19 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
                         ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                     onPressed: () {
                       var newTask = Task(
-                          id: uuid.v4(),
+                          id: widget.itemTask != null
+                              ? widget.itemTask!.id
+                              : uuid.v4(),
                           title: controllerNameTask.text,
                           isDone: isDone);
-                      context.read<TasksBloc>().add(AddTask(task: newTask));
+
+                      if (widget.itemTask != null) {
+                        context
+                            .read<TasksBloc>()
+                            .add(UpdateSingleTask(task: newTask));
+                      } else {
+                        context.read<TasksBloc>().add(AddTask(task: newTask));
+                      }
                       Navigator.pop(context);
                     },
                     child: Text('Guardar')),

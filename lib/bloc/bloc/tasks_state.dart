@@ -8,7 +8,9 @@ class TasksState extends Equatable {
   List<Object> get props => [allTask];
 
   Map<String, dynamic> toMap() {
-    return {'allTask': allTask.map((x) => x.toMap()).toList()};
+    return {
+      'allTask': allTask.map((x) => x.toMap()).toList(),
+    };
   }
 
   factory TasksState.fromMap(Map<String, dynamic> map) {
