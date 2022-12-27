@@ -61,18 +61,23 @@ class _FormTaskState extends State<FormTask> {
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                     onPressed: () {
-                      var newTask = Task(
-                          id: widget.itemTask != null
-                              ? widget.itemTask!.id
-                              : uuid.v4(),
-                          title: controllerNameTask.text,
-                          isDone: isDone);
-
                       if (widget.itemTask != null) {
+                        var updatedTask = Task(
+                            id: widget.itemTask?.id,
+                            userId: 200,
+                            title: controllerNameTask.text,
+                            isDone: isDone);
                         context
                             .read<TasksBloc>()
-                            .add(UpdateSingleTask(task: newTask));
+                            .add(UpdateSingleTask(task: updatedTask));
                       } else {
+                        final now = DateTime.now();
+                        int id = now.microsecondsSinceEpoch;
+                        var newTask = Task(
+                            id: id,
+                            userId: 200,
+                            title: controllerNameTask.text,
+                            isDone: isDone);
                         context.read<TasksBloc>().add(AddTask(task: newTask));
                       }
                       Navigator.pop(context);

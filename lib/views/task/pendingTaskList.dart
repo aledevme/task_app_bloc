@@ -31,20 +31,27 @@ class _PendingListScreenState extends State<PendingListScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TasksState>(
       builder: (context, state) {
-        List<Task> taskList = state.allTask;
-        List<Task> tasksThatAreNotFinished =
-            taskList.where((element) => !element.isDone!).toList();
         return Scaffold(
           appBar: AppBar(
             title: const Text('Pending Tasks'),
           ),
           drawer: DrawerApp(),
-          body: Container(
-              child: ListOfTask(
-                  onEditAction: (index) {
-                    _editTask(context, tasksThatAreNotFinished[index]);
-                  },
-                  taskList: tasksThatAreNotFinished)),
+          body: state.isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Container(
+                  child: ListOfTask(
+                      onEditAction: (index) {
+                        _editTask(
+                            context,
+                            state.allTask
+                                .where((element) => !element.isDone!)
+                                .toList()[index]);
+                      },
+                      taskList: state.allTask
+                          .where((element) => !element.isDone!)
+                          .toList())),
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () => _addTask(context),

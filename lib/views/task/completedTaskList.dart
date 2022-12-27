@@ -10,14 +10,16 @@ class CompletedTasksScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TasksState>(
       builder: (context, state) {
-        List<Task> taskList =
-            state.allTask.where((element) => element.isDone!).toList();
         return Scaffold(
           appBar: AppBar(
             title: const Text('Completed Tasks'),
           ),
           drawer: DrawerApp(),
-          body: Container(child: ListOfTask(taskList: taskList)),
+          body: Container(
+              child: ListOfTask(
+                  taskList: state.allTask
+                      .where((element) => element.isDone!)
+                      .toList())),
         );
       },
     );
