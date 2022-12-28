@@ -13,6 +13,7 @@ class PendingListScreen extends StatefulWidget {
 class _PendingListScreenState extends State<PendingListScreen> {
   void _addTask(BuildContext context) {
     showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         builder: (context) {
           return FormTask();
@@ -31,17 +32,32 @@ class _PendingListScreenState extends State<PendingListScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TasksState>(
       builder: (context, state) {
+        List<Task> list =
+            state.allTask.where((element) => !element.isDone!).toList();
+
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: Color(0xffe56b6f),
             title: const Text('Pending Tasks'),
+            actions: [
+              GestureDetector(
+                onTap: () {
+                  context.read<TasksBloc>().add(CheckAllTasks());
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Icon(Icons.done_all),
+                ),
+              )
+            ],
           ),
           drawer: DrawerApp(),
-          body: state.isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Container(
-                  child: ListOfTask(
+          body: Container(
+              child: list.isEmpty
+                  ? Center(
+                      child: Text('No pending tasks'),
+                    )
+                  : ListOfTask(
                       onEditAction: (index) {
                         _editTask(
                             context,
@@ -49,10 +65,9 @@ class _PendingListScreenState extends State<PendingListScreen> {
                                 .where((element) => !element.isDone!)
                                 .toList()[index]);
                       },
-                      taskList: state.allTask
-                          .where((element) => !element.isDone!)
-                          .toList())),
+                      taskList: list)),
           floatingActionButton: FloatingActionButton(
+            backgroundColor: Color(0xffeaac8b),
             child: Icon(Icons.add),
             onPressed: () => _addTask(context),
           ),

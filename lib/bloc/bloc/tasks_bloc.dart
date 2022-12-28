@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:equatable/equatable.dart';
 import 'package:task_app/bloc/bloc_exports.dart';
 import 'package:task_app/models/Task.dart';
@@ -10,6 +8,7 @@ part 'tasks_state.dart';
 class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
   TasksBloc() : super(const TasksState()) {
     on<AddTask>(_onAddTask);
+    on<CheckAllTasks>(_onCompleteAllTask);
     on<OnDoneTask>(_onDoneTask);
     on<UpdateSingleTask>(_onUpdateSingleTask);
     on<DeleteTask>(_onDeleteTask);
@@ -18,7 +17,15 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
   void _onAddTask(AddTask event, Emitter<TasksState> emit) {
     final state = this.state;
     List<Task> taskList = List.from(state.allTask)..add(event.task);
-    emit(TasksState(allTask: taskList.reversed.toList()));
+    emit(TasksState(allTask: taskList));
+  }
+
+  void _onCompleteAllTask(CheckAllTasks event, Emitter<TasksState> emit) {
+    List<Task> newList = [
+      ...state.allTask.map((item) => item.copyWith(isDone: true)),
+    ];
+
+    emit(TasksState(allTask: [...newList]));
   }
 
   void _onDoneTask(OnDoneTask event, Emitter<TasksState> emit) {

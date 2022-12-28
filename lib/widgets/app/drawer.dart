@@ -34,7 +34,7 @@ class DrawerApp extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Alejandro Gonzalez',
+                      'To do App',
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -42,7 +42,7 @@ class DrawerApp extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Flutter developer',
+                      'No let to do for tomorrow if you can do today.',
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,

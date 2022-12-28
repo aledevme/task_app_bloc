@@ -6,12 +6,17 @@ class Task extends Equatable {
   String title;
   bool? isDone;
 
-  Task({required this.userId, this.id, required this.title, this.isDone}) {
+  Task({
+    required this.userId,
+    this.id,
+    required this.title,
+    this.isDone,
+  }) {
     isDone = isDone ?? false;
   }
 
   Task copyWith(
-      {int? userId, int? id, String? title, bool? isDone, bool? isDeleted}) {
+      {int? userId, int? id, String? title, bool? isDone, bool? isSelected}) {
     return Task(
         userId: userId ?? this.userId,
         id: id ?? this.id,
@@ -20,7 +25,12 @@ class Task extends Equatable {
   }
 
   Map<String, dynamic> toMap() {
-    return {'userId': userId, 'id': id, 'title': title, 'isDone': isDone};
+    return {
+      'userId': userId,
+      'id': id,
+      'title': title,
+      'isDone': isDone,
+    };
   }
 
   factory Task.fromJSONResponse(Map<String, dynamic> response) {

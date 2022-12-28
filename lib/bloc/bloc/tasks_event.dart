@@ -13,6 +13,12 @@ class GetTasks extends TasksEvent {
   List<Object> get props => [];
 }
 
+class CheckAllTasks extends TasksEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
 class AddTask extends TasksEvent {
   final Task task;
 
